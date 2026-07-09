@@ -13,5 +13,10 @@ void Player::setId(unsigned int id) {
     ID = id;
 }
 
-Player::Player(Vector position, unsigned int id) : vector({0,0}), position(position),ID(id) {}
+Player::Player(sf::Vector2f position, unsigned int id) : position(position), ID(id), angle(0) {}
+
+
+void Player::movePlayer(sf::Vector2f vectorOfVelocity) {
+
+}
 

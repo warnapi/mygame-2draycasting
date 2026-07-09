@@ -19,3 +19,10 @@ Map::Map(Player *player){
     }
 }
 
+bool Map::getBlock(int i, int j) {
+    if (this->map_[i][j] == '#')
+        return true;
+    else
+        return false;
+}
+

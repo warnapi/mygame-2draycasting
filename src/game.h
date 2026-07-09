@@ -15,10 +15,10 @@ private:
     Map map;
     Player player;
 public:
-    void MovePlayer(Vector vector);
-    Game(Vector PositionOfPlayer, unsigned int idOfPlayer);
-    void draw(sf::RenderWindow& window, std::vector<std::unique_ptr<sf::Drawable>>& container);
-    void init(std::vector<std::unique_ptr<sf::Drawable>>& container);
+    void MovePlayer(sf::Vector2f vector, std::vector<std::unique_ptr<sf::Drawable>>& playerContainer);
+    Game(sf::Vector2f PositionOfPlayer, unsigned int idOfPlayer);
+    void draw(sf::RenderWindow& window, std::vector<std::unique_ptr<sf::Drawable>>& mapContainer, std::vector<std::unique_ptr<sf::Drawable>>& playerContainer);
+    void init(std::vector<std::unique_ptr<sf::Drawable>>& mapContainer, std::vector<std::unique_ptr<sf::Drawable>>& playerContainer);
 };
 
 
