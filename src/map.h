@@ -6,16 +6,17 @@
 #define PERSON_GAMES_MAP_H
 
 
-#include "player.h"
 #include "game_const.h"
 
-class Map {
+class Map{
 private:
     char map_[height_of_map][width_of_map]{};
-    Player* player;
+    std::vector<std::unique_ptr<sf::Shape>> mapContainer;
 public:
+    void draw(sf::RenderWindow& window);
     bool getBlock(int i, int j);
-    explicit Map(Player *player);
+    bool getBlock(sf::Vector2f vector);
+    explicit Map();
 };
 
 
