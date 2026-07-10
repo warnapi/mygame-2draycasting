@@ -16,6 +16,7 @@ private:
     Player player;
 public:
     void MovePlayer(sf::Vector2f vector);
+    void RotatePlayer(sf::Angle angle);
     Game(sf::Vector2f PositionOfPlayer, unsigned int idOfPlayer);
     void draw(sf::RenderWindow& window);
 };

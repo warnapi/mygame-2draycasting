@@ -18,3 +18,7 @@ void Game::draw(sf::RenderWindow& window) {
     window.display();
 }
 
+void Game::RotatePlayer(sf::Angle angle) {
+   this->player.rotatePlayer(angle);
+}
+
