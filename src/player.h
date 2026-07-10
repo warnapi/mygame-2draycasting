@@ -13,12 +13,13 @@ private:
     std::vector<std::unique_ptr<sf::Shape>> playerContainer;
     sf::Vector2f position;
     unsigned int ID;
+    float angle;
 public:
     Player(sf::Vector2f position, unsigned int id);
     void draw(sf::RenderWindow& window);
 
     void movePlayer(sf::Vector2f vectorOfVelocity, Map& map);
-    float angle;
+
     unsigned int getId() const;
 
 };

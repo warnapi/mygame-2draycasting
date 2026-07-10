@@ -14,7 +14,7 @@ private:
     std::vector<std::unique_ptr<sf::Shape>> mapContainer;
 public:
     void draw(sf::RenderWindow& window);
-    bool getBlock(int i, int j);
+    bool getBlock(int x, int y);
     bool getBlock(sf::Vector2f vector);
     explicit Map();
 };

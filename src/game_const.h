@@ -11,4 +11,5 @@ const int height_of_map = 20;
 const int width_of_map = 40;
 const float coefficient = 30;
 const float thicknessOfBoarders = coefficient/10;
+const float VisibilityRange = 15;
 #endif //PERSON_GAMES_GAME_CONST_H

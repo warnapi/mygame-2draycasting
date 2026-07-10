@@ -35,16 +35,18 @@ Map::Map() {
 }
 
 bool Map::getBlock(int x, int y) {
-    if (this->map_[y][x] == '#' || x < 0 || y < 0 || x >= width_of_map || y >= height_of_map)
+    if (x < 0 || y < 0 || x >= width_of_map || y >= height_of_map || this->map_[y][x] == '#')
         return true;
     else
         return false;
 }
 bool Map::getBlock(sf::Vector2f vector) {
-    if (this->map_[(int)vector.y][(int)vector.x] == '#' || (int)vector.x < 0 || (int)vector.y < 0 || (int)vector.x >= width_of_map || (int)vector.y >= height_of_map)
+    if ((int)(vector.x) < 0 || (int)(vector.y) < 0 || (int)(vector.x) >= width_of_map || (int)(vector.y) >= height_of_map || this->map_[(int)(vector.y)][(int)vector.x] == '#') {
         return true;
-    else
+    }
+    else{
         return false;
+    }
 }
 
 void Map::draw(sf::RenderWindow& window) {

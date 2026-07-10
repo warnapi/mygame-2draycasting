@@ -18,12 +18,12 @@ int main()
                 window.close();
         }
         sf::Vector2f vectorOfSpeed{0,0};
-        float speed = 0.3;
+        float speed = 0.01;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) vectorOfSpeed.y = -speed;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) vectorOfSpeed.x = -speed;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) vectorOfSpeed.x = speed;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) vectorOfSpeed.x = speed;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) vectorOfSpeed.x = -speed;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) vectorOfSpeed.y = speed;
-        game.MovePlayer(vectorOfSpeed);
+        game.MovePlayer(vectorOfSpeed*time);
         game.draw(window);
     }
 
