@@ -11,13 +11,15 @@
 
 class Player {
 private:
-    std::vector<std::unique_ptr<sf::Shape>> playerContainer;
+    std::vector<std::unique_ptr<sf::RectangleShape>> raysContainer;
+    std::unique_ptr<sf::CircleShape> ballOfPlayerOnMap;
     sf::Vector2f position;
     unsigned int ID;
     sf::Angle angle;
+    std::vector<float> arrOfSizeOfRays;
 public:
     Player(sf::Vector2f position, unsigned int id);
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderWindow& window, Map& map);
 
     void movePlayer(sf::Vector2f vectorOfVelocity, Map& map);
 
@@ -25,6 +27,9 @@ public:
 
     unsigned int getId() const;
 
+    float rayCalculating(Map& map, sf::Vector2f startPosOfRay, sf::Angle angle1);
+
+    void calculateRays(Map& map);
 };
 
 

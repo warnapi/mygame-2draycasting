@@ -15,4 +15,5 @@ const float VisibilityRange = 15;
 const int POV = 90;
 const float speedOfTurn = 200;
 const float speed = 15;
+const float sizeOfLine = coefficient/16;
 #endif //PERSON_GAMES_GAME_CONST_H

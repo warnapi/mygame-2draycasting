@@ -14,7 +14,7 @@ void Game::MovePlayer(sf::Vector2f vector) {
 void Game::draw(sf::RenderWindow& window) {
     window.clear();
     this->map.draw(window);
-    this->player.draw(window);
+    this->player.draw(window, this->map);
     window.display();
 }
 

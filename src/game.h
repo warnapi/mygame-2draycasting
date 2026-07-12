@@ -12,9 +12,10 @@
 
 class Game {
 private:
-    Map map;
+
     Player player;
 public:
+    Map map;
     void MovePlayer(sf::Vector2f vector);
     void RotatePlayer(sf::Angle angle);
     Game(sf::Vector2f PositionOfPlayer, unsigned int idOfPlayer);
