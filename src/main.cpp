@@ -16,17 +16,18 @@ int main()
             if (event->is<sf::Event::Closed>())
                 window.close();
         }
+        bool event = 0;
         sf::Angle angleOfTurn = sf::Angle{sf::degrees(0)};
         sf::Vector2f vectorOfSpeed{0,0};
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) vectorOfSpeed.y = -speed;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) vectorOfSpeed.x = speed;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) vectorOfSpeed.x = -speed;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) vectorOfSpeed.y = speed;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E)) angleOfTurn += sf::degrees(speedOfTurn * time);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) angleOfTurn -= sf::degrees(speedOfTurn * time);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) vectorOfSpeed.y = -speed; event = 1;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) vectorOfSpeed.x = speed; event = 1;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) vectorOfSpeed.x = -speed; event = 1;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) vectorOfSpeed.y = speed; event = 1;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E)) angleOfTurn += sf::degrees(speedOfTurn * time); event = 1;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) angleOfTurn -= sf::degrees(speedOfTurn * time); event = 1;
         game.MovePlayer(vectorOfSpeed*time);
         game.RotatePlayer(angleOfTurn);
-        game.draw(window);
+        game.draw(window, event);
     }
 
     return 0;

@@ -11,9 +11,7 @@
 class Map{
 private:
     char map_[height_of_map][width_of_map]{};
-    std::vector<std::unique_ptr<sf::Shape>> mapContainer;
 public:
-    void draw(sf::RenderWindow& window);
     bool getBlock(int x, int y);
     bool getBlock(sf::Vector2f vector);
     explicit Map();

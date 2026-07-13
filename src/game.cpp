@@ -4,21 +4,23 @@
 #include "game.h"
 
 
-Game::Game(sf::Vector2f PositionOfPlayer, unsigned int idOfPlayer) : player(Player{PositionOfPlayer, idOfPlayer}) {}
+Game::Game(sf::Vector2f PositionOfPlayer, unsigned int idOfPlayer) {
+
+}
 
 
 void Game::MovePlayer(sf::Vector2f vector) {
-    this->player.movePlayer(vector, this->map);
+    player.movePlayer(vector, this->map);
 }
 
-void Game::draw(sf::RenderWindow& window) {
+void Game::draw(sf::RenderWindow& window, bool event) {
     window.clear();
-    this->map.draw(window);
-    this->player.draw(window, this->map);
+    map.draw(window, event);
+    player.draw(window, map);
     window.display();
 }
 
 void Game::RotatePlayer(sf::Angle angle) {
-   this->player.rotatePlayer(angle);
+   player.rotatePlayer(angle);
 }
 

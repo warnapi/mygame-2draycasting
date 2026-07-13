@@ -18,6 +18,8 @@ add_executable(person_games
         src/game_const.h
         src/game.cpp
         src/game.h
+        src/render.cpp
+        src/render.h
 )
 
 target_link_libraries(person_games PRIVATE SFML::Graphics SFML::Window SFML::System)

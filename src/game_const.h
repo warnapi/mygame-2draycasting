@@ -6,7 +6,7 @@
 #define PERSON_GAMES_GAME_CONST_H
 #include <SFML/Graphics.hpp>
 
-const sf::Vector2f StartPos{1000, 400};
+const sf::Vector2f PosOfMap{1000, 400};
 const int height_of_map = 30;
 const int width_of_map = 30;
 const float coefficient = 30;

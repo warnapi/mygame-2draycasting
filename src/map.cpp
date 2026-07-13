@@ -14,24 +14,6 @@ Map::Map() {
             }
         }
     }
-
-    auto mapOnScreen = std::make_unique<sf::RectangleShape>(sf::Vector2f {width_of_map*coefficient, height_of_map*coefficient});
-
-    mapOnScreen->setPosition(StartPos);
-    mapOnScreen->setFillColor(sf::Color::Blue);
-    this->mapContainer.push_back(std::move(mapOnScreen));                       //map back init
-    for (int y = 0; y < height_of_map; ++y) {
-        for (int x = 0; x < width_of_map; ++x) {
-            if(this->getBlock(x,y)) {
-                auto block  = std::make_unique<sf::RectangleShape>(sf::Vector2f{coefficient-(int)(2*thicknessOfBoarders),coefficient-(int)(2*thicknessOfBoarders)});
-                block->setPosition(StartPos + sf::Vector2f{(float)x*coefficient + thicknessOfBoarders,(float)y*coefficient + thicknessOfBoarders});
-                block->setFillColor(sf::Color::Red);
-                block->setOutlineThickness(thicknessOfBoarders);
-                block->setOutlineColor(sf::Color::White);
-                mapContainer.push_back(std::move(block));
-            }
-        }
-    }
 }
 
 bool Map::getBlock(int x, int y) {
@@ -50,7 +32,3 @@ bool Map::getBlock(sf::Vector2f vector) {
     }
 }
 
-void Map::draw(sf::RenderWindow& window) {
-    for (int i = 0; i < mapContainer.size(); i++)
-        window.draw(*mapContainer[i]);
-}
