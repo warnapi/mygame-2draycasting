@@ -2,21 +2,21 @@
 // Created by warnap on 13.07.2026.
 //
 
-#include "render.h"
+#include "miniMapRender.h"
 
-Render::Render(Map& map, std::vector<std::reference_wrapper<Player>> arrayOfPlayers) : map_(map){
+MiniMapRender::MiniMapRender(Map& map, std::vector<std::reference_wrapper<Player>> &arrayOfPlayers)
+        :  arrayOfPlayers_(arrayOfPlayers), map_(map) {
     //инициализация всех игроков
     for (int j = 0; j < arrayOfPlayers.size(); ++j) {
 
         renderPlayer(arrayOfPlayers[j]);
     }
     //инициализация мапы
-    renderMap(map);
+    renderMap();
 }
 
-void Render::renderPlayer(std::reference_wrapper<Player> Player) {
+void MiniMapRender::renderPlayer(std::reference_wrapper<Player> Player) {
     sf::Vector2f currentPosition = Player.get().getPosition();
-    arrayOfPlayers_.push_back(std::ref(Player));
     arrOfSizeOfRays.emplace_back();
     auto CircleOfPlayer = std::make_unique<sf::CircleShape>(coefficient/2);
     CircleOfPlayer->setFillColor(sf::Color::Cyan);
@@ -27,8 +27,10 @@ void Render::renderPlayer(std::reference_wrapper<Player> Player) {
                                                PosOfMap.y + currentPosition.y*coefficient + coefficient/2};
     raysOfPlayersContainer_.emplace_back();
     for(int n = 0; n < POV; ++n) {
-        arrOfSizeOfRays.back().push_back(rayCalculating(currentPosition + sf::Vector2f{0.5f,0.5f},
-                                                        sf::Angle{Player.get().getAngle() - (sf::degrees(n))}));
+        sf::Angle angleDiff = Player.get().getAngle() - (sf::degrees(n)) - sf::Angle{Player.get().getAngle() - (sf::degrees(POV/2))};
+        float distance = rayCalculating(currentPosition + sf::Vector2f{0.5f,0.5f},(Player.get().getAngle() - (sf::degrees(n))));
+        float correctedDistance = distance * cos(angleDiff.asRadians());
+        arrOfSizeOfRays.back().push_back(correctedDistance);
         auto ray = std::make_unique<sf::RectangleShape>(sf::Vector2f{arrOfSizeOfRays.back().back()*coefficient, sizeOfLine});
         ray->setFillColor(sf::Color::Green);
         ray->setPosition(sf::Vector2f{centerOfPlayer} - sf::Vector2f{0, sizeOfLine/2});
@@ -38,7 +40,7 @@ void Render::renderPlayer(std::reference_wrapper<Player> Player) {
     }
 }
 
-void Render::renderMap(Map &map) {
+void MiniMapRender::renderMap() {
     auto background = std::make_unique<sf::RectangleShape>(sf::Vector2f {width_of_map*coefficient, height_of_map*coefficient});
     background->setPosition(PosOfMap);
     background->setFillColor(sf::Color::Blue);
@@ -57,7 +59,7 @@ void Render::renderMap(Map &map) {
     }
 }
 
-float Render::rayCalculating(sf::Vector2f PosOnMapOfRay, sf::Angle angle1) {
+float MiniMapRender::rayCalculating(sf::Vector2f PosOnMapOfRay, sf::Angle angle1) {
     sf::Vector2f normalizedVector = {(float)cos(angle1.asRadians()), (float)sin(angle1.asRadians())};
     sf::Vector2f distToNextBlock;
     if (normalizedVector.x == 0) {
@@ -77,43 +79,45 @@ float Render::rayCalculating(sf::Vector2f PosOnMapOfRay, sf::Angle angle1) {
         mainDistanceToNextBlock.x = (PosOnMapOfRay.x - (int)PosOnMapOfRay.x)*distToNextBlock.x;
     } else {
         directionOfMoving.x = 1;
-        mainDistanceToNextBlock.x = ((int)PosOnMapOfRay.x+1 - PosOnMapOfRay.x)*distToNextBlock.x;
+        mainDistanceToNextBlock.x = ((int)(PosOnMapOfRay.x+1) - PosOnMapOfRay.x)*distToNextBlock.x;
     }
     if (normalizedVector.y < 0) {
         directionOfMoving.y = -1;
         mainDistanceToNextBlock.y = (PosOnMapOfRay.y - (int)PosOnMapOfRay.y)*distToNextBlock.y;
     } else {
         directionOfMoving.y = 1;
-        mainDistanceToNextBlock.y = ((int)PosOnMapOfRay.y+1 - PosOnMapOfRay.y)*distToNextBlock.y;
+        mainDistanceToNextBlock.y = ((int)(PosOnMapOfRay.y+1) - PosOnMapOfRay.y)*distToNextBlock.y;
     }
     float actualDistance = 0;
-    sf::Vector2i actualPosition = sf::Vector2i {(int)PosOnMapOfRay.x,(int)PosOnMapOfRay.y};
+    sf::Vector2i actualPosition = {(int)PosOnMapOfRay.x,(int)PosOnMapOfRay.y};
     bool hit = 0;
     while (!hit) {
         if(mainDistanceToNextBlock.x < mainDistanceToNextBlock.y) {
-            mainDistanceToNextBlock.x += distToNextBlock.x;
             actualDistance = mainDistanceToNextBlock.x;
+            mainDistanceToNextBlock.x += distToNextBlock.x;
             actualPosition.x += directionOfMoving.x;
         } else {
-            mainDistanceToNextBlock.y += distToNextBlock.y;
             actualDistance = mainDistanceToNextBlock.y;
+            mainDistanceToNextBlock.y += distToNextBlock.y;
             actualPosition.y += directionOfMoving.y;
         }
-        if (map_.getBlock(actualPosition.x,actualPosition.y)) {
+        if (actualPosition.x < 0 || actualPosition.y < 0 ||
+            actualPosition.x >= width_of_map || actualPosition.y >= height_of_map) {
+            break;
+        }
+        if (map_.getBlock(actualPosition.x, actualPosition.y)) {
             hit = 1;
         }
-        if(actualDistance > VisibilityRange) {
-            return VisibilityRange;
-        }
+        if (actualDistance > VisibilityRange) return VisibilityRange;
     }
     return actualDistance;
 }
 
-void Render::draw(sf::RenderWindow &window, bool event) {
+void MiniMapRender::draw(sf::RenderWindow &window, bool event) {
     if (event) calculatePlayers();
 
     for (int i = 0; i < mapContainer_.size(); ++i) {
-        window.draw(*mapContainer_[i]);
+        window.draw(*mapContainer_.at(i));
     }
     for (int i = 0; i < raysOfPlayersContainer_.size(); i++) {
         for (int n = 0; n < raysOfPlayersContainer_[i].size(); ++n) {
@@ -125,21 +129,23 @@ void Render::draw(sf::RenderWindow &window, bool event) {
     }
 }
 
-void Render::calculatePlayers() {
+void MiniMapRender::calculatePlayers() {
     for (int j = 0; j < arrayOfPlayers_.size(); ++j) {
         changeShapesOfPlayer(j);
     }
 }
 
-void Render::changeShapesOfPlayer(int index) {
-    Player& currentPlayer = arrayOfPlayers_[index];
+void MiniMapRender::changeShapesOfPlayer(int index) {
+    Player& currentPlayer = arrayOfPlayers_.at(index);
     sf::Vector2f currentPosition = currentPlayer.getPosition();
     sf::Vector2f centerOfPlayer = sf::Vector2f{PosOfMap.x + currentPosition.x*coefficient + coefficient/2,
                                                PosOfMap.y + currentPosition.y*coefficient + coefficient/2};
 
     for (int i = 0; i < raysOfPlayersContainer_[index].size(); ++i) {
-        arrOfSizeOfRays[index][i] = (rayCalculating(currentPosition + sf::Vector2f{0.5f,0.5f},
-                                                        sf::Angle{currentPlayer.getAngle() - (sf::degrees(i))}));
+        sf::Angle angleDiff = currentPlayer.getAngle() - (sf::degrees(i)) - sf::Angle{currentPlayer.getAngle() - (sf::degrees(POV/2))};
+        float distance = rayCalculating(currentPosition + sf::Vector2f{0.5f,0.5f},(currentPlayer.getAngle() - (sf::degrees(i))));
+        float correctedDistance = distance * cos(angleDiff.asRadians());
+        arrOfSizeOfRays[index][i] = (correctedDistance);
         raysOfPlayersContainer_[index][i].get()->setSize({arrOfSizeOfRays[index][i]*coefficient, sizeOfLine});
         raysOfPlayersContainer_[index][i].get()->setRotation(sf::Angle{sf::degrees(currentPlayer.getAngle().asDegrees()) - sf::degrees(i)});
         raysOfPlayersContainer_[index][i].get()->setPosition(sf::Vector2f{centerOfPlayer} - sf::Vector2f{0, sizeOfLine/2});

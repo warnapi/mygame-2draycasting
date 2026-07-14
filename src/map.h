@@ -12,8 +12,9 @@ class Map{
 private:
     char map_[height_of_map][width_of_map]{};
 public:
+    void drawMap();
     bool getBlock(int x, int y);
-    bool getBlock(sf::Vector2f vector);
+    bool getBlock(sf::Vector2f vector, int size);
     explicit Map();
 };
 

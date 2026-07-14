@@ -16,9 +16,9 @@ private:
     sf::Angle angle;
 
 public:
-    const sf::Vector2f getPosition() const;
+    sf::Vector2f getPosition() const;
 
-    const sf::Angle getAngle() const;
+    sf::Angle getAngle() const;
 
     Player(sf::Vector2f position, unsigned int id);
 
