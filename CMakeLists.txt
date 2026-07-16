@@ -22,6 +22,7 @@ add_executable(person_games
         src/miniMapRender.h
         src/CameraRender.cpp
         src/CameraRender.h
+        src/rayInfo.h
 )
 
 target_link_libraries(person_games PRIVATE SFML::Graphics SFML::Window SFML::System)

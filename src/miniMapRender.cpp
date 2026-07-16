@@ -17,7 +17,7 @@ MiniMapRender::MiniMapRender(Map& map, std::vector<std::reference_wrapper<Player
 
 void MiniMapRender::renderPlayer(std::reference_wrapper<Player> Player) {
     sf::Vector2f currentPosition = Player.get().getPosition();
-    arrOfSizeOfRays.emplace_back();
+    arrOfSizeOfRays_.emplace_back();
     auto CircleOfPlayer = std::make_unique<sf::CircleShape>(coefficient/2);
     CircleOfPlayer->setFillColor(sf::Color::Cyan);
     CircleOfPlayer->setPosition(PosOfMap + sf::Vector2f{currentPosition.x*coefficient, currentPosition.y*coefficient});
@@ -28,10 +28,10 @@ void MiniMapRender::renderPlayer(std::reference_wrapper<Player> Player) {
     raysOfPlayersContainer_.emplace_back();
     for(int n = 0; n < POV; ++n) {
         sf::Angle angleDiff = Player.get().getAngle() - (sf::degrees(n)) - sf::Angle{Player.get().getAngle() - (sf::degrees(POV/2))};
-        float distance = rayCalculating(currentPosition + sf::Vector2f{0.5f,0.5f},(Player.get().getAngle() - (sf::degrees(n))));
-        float correctedDistance = distance * cos(angleDiff.asRadians());
-        arrOfSizeOfRays.back().push_back(correctedDistance);
-        auto ray = std::make_unique<sf::RectangleShape>(sf::Vector2f{arrOfSizeOfRays.back().back()*coefficient, sizeOfLine});
+        RayInfo distance = rayCalculating(currentPosition + sf::Vector2f{0.5f,0.5f},(Player.get().getAngle() - (sf::degrees(n))));
+        RayInfo correctedDistance = {distance.distance * (float)cos(angleDiff.asRadians()), distance.hit};
+        arrOfSizeOfRays_.push_back(correctedDistance);
+        auto ray = std::make_unique<sf::RectangleShape>(sf::Vector2f{arrOfSizeOfRays_.back().distance*coefficient, sizeOfLine});
         ray->setFillColor(sf::Color::Green);
         ray->setPosition(sf::Vector2f{centerOfPlayer} - sf::Vector2f{0, sizeOfLine/2});
         ray->setOrigin(sf::Vector2f{0, sizeOfLine/2});
@@ -59,7 +59,7 @@ void MiniMapRender::renderMap() {
     }
 }
 
-float MiniMapRender::rayCalculating(sf::Vector2f PosOnMapOfRay, sf::Angle angle1) {
+RayInfo MiniMapRender::rayCalculating(sf::Vector2f PosOnMapOfRay, sf::Angle angle1) {
     sf::Vector2f normalizedVector = {(float)cos(angle1.asRadians()), (float)sin(angle1.asRadians())};
     sf::Vector2f distToNextBlock;
     if (normalizedVector.x == 0) {
@@ -108,13 +108,13 @@ float MiniMapRender::rayCalculating(sf::Vector2f PosOnMapOfRay, sf::Angle angle1
         if (map_.getBlock(actualPosition.x, actualPosition.y)) {
             hit = 1;
         }
-        if (actualDistance > VisibilityRange) return VisibilityRange;
+        if (actualDistance > VisibilityRange) return {VisibilityRange, false};
     }
-    return actualDistance;
+
+    return {actualDistance, true};
 }
 
 void MiniMapRender::draw(sf::RenderWindow &window, bool event) {
-    if (event) calculatePlayers();
 
     for (int i = 0; i < mapContainer_.size(); ++i) {
         window.draw(*mapContainer_.at(i));
@@ -143,12 +143,16 @@ void MiniMapRender::changeShapesOfPlayer(int index) {
 
     for (int i = 0; i < raysOfPlayersContainer_[index].size(); ++i) {
         sf::Angle angleDiff = currentPlayer.getAngle() - (sf::degrees(i)) - sf::Angle{currentPlayer.getAngle() - (sf::degrees(POV/2))};
-        float distance = rayCalculating(currentPosition + sf::Vector2f{0.5f,0.5f},(currentPlayer.getAngle() - (sf::degrees(i))));
-        float correctedDistance = distance * cos(angleDiff.asRadians());
-        arrOfSizeOfRays[index][i] = (correctedDistance);
-        raysOfPlayersContainer_[index][i].get()->setSize({arrOfSizeOfRays[index][i]*coefficient, sizeOfLine});
+        RayInfo distance = rayCalculating(currentPosition + sf::Vector2f{0.5f,0.5f},(currentPlayer.getAngle() - (sf::degrees(i))));
+        RayInfo correctedDistance = {distance.distance * (float)cos(angleDiff.asRadians()), distance.hit};
+        arrOfSizeOfRays_[i] = (correctedDistance);
+        raysOfPlayersContainer_[index][i].get()->setSize({arrOfSizeOfRays_[i].distance*coefficient, sizeOfLine});
         raysOfPlayersContainer_[index][i].get()->setRotation(sf::Angle{sf::degrees(currentPlayer.getAngle().asDegrees()) - sf::degrees(i)});
         raysOfPlayersContainer_[index][i].get()->setPosition(sf::Vector2f{centerOfPlayer} - sf::Vector2f{0, sizeOfLine/2});
     }
     ballOfPlayersOnMap_[index].get()->setPosition(PosOfMap + sf::Vector2f{currentPosition.x*coefficient, currentPosition.y*coefficient});
+}
+
+std::vector<RayInfo> &MiniMapRender::getArrOfSizeOfRays() {
+    return arrOfSizeOfRays_;
 }

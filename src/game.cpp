@@ -4,8 +4,9 @@
 #include "game.h"
 
 
-Game::Game(std::vector<std::reference_wrapper<Player>>& arrayOfPlayers) : map(), arrayOfPlayers_(arrayOfPlayers),
-                                                                          miniMapRender(map, arrayOfPlayers) {
+Game::Game(std::vector<std::reference_wrapper<Player>>& arrayOfPlayers, sf::Vector2i sizeOfWindow) : map(), arrayOfPlayers_(arrayOfPlayers),
+                                                                          miniMapRender(map, arrayOfPlayers),
+                                                                          cameraRender(miniMapRender.getArrOfSizeOfRays(), sizeOfWindow) {
 }
 
 
@@ -15,6 +16,10 @@ void Game::MovePlayer(sf::Vector2f vector, unsigned int idOfPlayer) {
 
 void Game::draw(sf::RenderWindow& window, bool event) {
     window.clear();
+    if (event) {
+        miniMapRender.calculatePlayers();
+    }
+    cameraRender.draw(window, event);
     miniMapRender.draw(window, event);
     window.display();
 }
