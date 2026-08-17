@@ -14,7 +14,7 @@ private:
     sf::Vector2f position;
     unsigned int ID;
     sf::Angle angle;
-
+    int hickPoint;
 public:
     sf::Vector2f getPosition() const;
 

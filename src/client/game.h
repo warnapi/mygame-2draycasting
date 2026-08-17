@@ -6,10 +6,10 @@
 #define PERSON_GAMES_GAME_H
 
 #include <SFML/Graphics.hpp>
-#include "map.h"
-#include "player.h"
+#include "../general/map.h"
+#include "../general/player.h"
 #include "miniMapRender.h"
-#include "game_const.h"
+#include "../general/game_const.h"
 #include "CameraRender.h"
 
 class Game {
@@ -23,7 +23,7 @@ public:
     void MovePlayer(sf::Vector2f vector, unsigned int idOfPlayer);
     void RotatePlayer(sf::Angle angle, unsigned int idOfPlayer);
     Game(std::vector<std::reference_wrapper<Player>>& arrayOfPlayers, sf::Vector2i sizeOfWindow);
-    void draw(sf::RenderWindow& window, bool event);
+    void draw(sf::RenderWindow& window);
 };
 
 

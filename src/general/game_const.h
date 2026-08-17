@@ -13,7 +13,8 @@ const float coefficient = 15;
 const float thicknessOfBoarders = coefficient/10;
 const float VisibilityRange = 30;
 const int POV = 120;
-const float speedOfTurn = 200;
+const float speedOfTurn = 400;
 const float speed = 15;
 const float sizeOfLine = coefficient/16;
+const int SIZEOFBUFFEROFMSG = 1024;
 #endif //PERSON_GAMES_GAME_CONST_H

@@ -5,9 +5,9 @@
 #ifndef PERSON_GAMES_MINIMAPRENDER_H
 #define PERSON_GAMES_MINIMAPRENDER_H
 
-#include "map.h"
-#include "player.h"
-#include "rayInfo.h"
+#include "../general/map.h"
+#include "../general/player.h"
+#include "../general/rayInfo.h"
 class MiniMapRender {
 private:
     Map& map_;
@@ -24,7 +24,7 @@ private:
 public:
     void calculatePlayers();
     MiniMapRender(Map& map, std::vector<std::reference_wrapper<Player>> &arrayOfPlayers);
-    void draw(sf::RenderWindow &window, bool event);
+    void draw(sf::RenderWindow &window);
     std::vector<RayInfo>& getArrOfSizeOfRays();
 };
 

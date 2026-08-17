@@ -9,7 +9,7 @@ unsigned int Player::getId() const {
     return ID;
 }
 
-Player::Player(sf::Vector2f position, unsigned int id) : position(position), ID(id) {}
+Player::Player(sf::Vector2f position, unsigned int id) : position(position), ID(id), hickPoint(100) {}
 
 
 void Player::movePlayer(sf::Vector2f vectorOfVelocity, Map& map) {

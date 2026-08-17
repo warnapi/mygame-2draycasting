@@ -17,7 +17,6 @@ MiniMapRender::MiniMapRender(Map& map, std::vector<std::reference_wrapper<Player
 
 void MiniMapRender::renderPlayer(std::reference_wrapper<Player> Player) {
     sf::Vector2f currentPosition = Player.get().getPosition();
-    arrOfSizeOfRays_.emplace_back();
     auto CircleOfPlayer = std::make_unique<sf::CircleShape>(coefficient/2);
     CircleOfPlayer->setFillColor(sf::Color::Cyan);
     CircleOfPlayer->setPosition(PosOfMap + sf::Vector2f{currentPosition.x*coefficient, currentPosition.y*coefficient});
@@ -114,8 +113,7 @@ RayInfo MiniMapRender::rayCalculating(sf::Vector2f PosOnMapOfRay, sf::Angle angl
     return {actualDistance, true};
 }
 
-void MiniMapRender::draw(sf::RenderWindow &window, bool event) {
-
+void MiniMapRender::draw(sf::RenderWindow &window) {
     for (int i = 0; i < mapContainer_.size(); ++i) {
         window.draw(*mapContainer_.at(i));
     }
@@ -132,6 +130,7 @@ void MiniMapRender::draw(sf::RenderWindow &window, bool event) {
 void MiniMapRender::calculatePlayers() {
     for (int j = 0; j < arrayOfPlayers_.size(); ++j) {
         changeShapesOfPlayer(j);
+
     }
 }
 

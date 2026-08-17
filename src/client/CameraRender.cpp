@@ -22,7 +22,7 @@ sf::Vector2f CameraRender::calculateLineSize(float distance) {
 }
 
 sf::Vector2f CameraRender::calculatePosition(sf::Vector2f sizeOfLine, int index) {
-    return sf::Vector2f{(float)sizeofWindow_.x - ((float)sizeofWindow_.x/POV)*(float)index,(((float)sizeofWindow_.y - sizeOfLine.y)/2)};
+    return sf::Vector2f{(float)sizeofWindow_.x - (((float)sizeofWindow_.x/POV)*(float)(index+1)),(((float)sizeofWindow_.y - sizeOfLine.y)/2)};
 }
 
 sf::Color CameraRender::calculateDarkness(RayInfo distance, sf::Color baseColor) {
@@ -38,8 +38,8 @@ sf::Color CameraRender::calculateDarkness(RayInfo distance, sf::Color baseColor)
     };
 }
 
-void CameraRender::draw(sf::RenderWindow& window, bool event) {
-    if (event) {updateShapes();}
+void CameraRender::draw(sf::RenderWindow& window) {
+    updateShapes();
     for (int i = 0; i < arrOfLineShapes_.size(); ++i) {
         window.draw(arrOfLineShapes_[i]);
     }

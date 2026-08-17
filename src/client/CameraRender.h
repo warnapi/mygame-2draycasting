@@ -7,8 +7,8 @@
 
 #include "SFML/Graphics.hpp"
 #include <vector>
-#include "game_const.h"
-#include "rayInfo.h"
+#include "../general/game_const.h"
+#include "../general/rayInfo.h"
 #include <cstdint>
 
 class CameraRender {
@@ -22,7 +22,7 @@ private:
     sf::Color calculateDarkness(RayInfo distance, sf::Color baseColor);
     void updateShapes();
 public:
-    void draw(sf::RenderWindow& window, bool event);
+    void draw(sf::RenderWindow& window);
     CameraRender(std::vector<RayInfo>&  arrOfSizeOfRays, sf::Vector2i sizeofWindow);
 };
 

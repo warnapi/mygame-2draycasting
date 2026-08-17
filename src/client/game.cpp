@@ -14,13 +14,11 @@ void Game::MovePlayer(sf::Vector2f vector, unsigned int idOfPlayer) {
     arrayOfPlayers_.at(idOfPlayer).get().movePlayer(vector, this->map);
 }
 
-void Game::draw(sf::RenderWindow& window, bool event) {
+void Game::draw(sf::RenderWindow& window) {
     window.clear();
-    if (event) {
-        miniMapRender.calculatePlayers();
-    }
-    cameraRender.draw(window, event);
-    miniMapRender.draw(window, event);
+    miniMapRender.calculatePlayers();
+    cameraRender.draw(window);
+    miniMapRender.draw(window);
     window.display();
 }
 
